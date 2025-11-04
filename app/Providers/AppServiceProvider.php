@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
                     'alumni',
                     'loker',
                     'master_perusahaan', // tetap ambil tabel ini
-                    'galeri',
+                    'galeri_usaha',
                 ]);
             })
             ->map(function ($table) {
