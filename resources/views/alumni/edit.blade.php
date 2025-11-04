@@ -25,7 +25,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="NIM" class="form-label">NIM</label>
+            <label for="nomor_kta" class="form-label">Nomor KTA</label>
             <input type="text" name="NIM" class="form-control" value="{{ old('NIM', $alumni->NIM) }}" required>
         </div>
 

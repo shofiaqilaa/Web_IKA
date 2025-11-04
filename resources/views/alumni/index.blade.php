@@ -13,10 +13,13 @@
       <thead class="table-dark">
         <tr>
           <th>Nama</th>
-          <th>NIM</th>
+          <th>Nomor KTA</th>
           <th>Tahun Lulus</th>
           <th>Jurusan</th>
           <th>Prodi</th>
+          <th>Username</th>
+          <th>Password (hash)</th>
+
           <th>Aksi</th>
         </tr>
       </thead>
@@ -24,10 +27,13 @@
         @foreach ($alumni as $a)
         <tr>
           <td>{{ $a->nama_alumni }}</td>
-          <td>{{ $a->nim }}</td>
+          <td>{{ $a->nomor_kta }}</td>
           <td>{{ $a->tahun_lulus }}</td>
           <td>{{ $a->jurusan_alumni }}</td>
           <td>{{ $a->prodi_alumni }}</td>
+          <td>{{ $a->username }}</td>
+          <td>{{ Str::limit($a->password, 10, '...') }}</td>
+
           <td>
             <a href="{{ route('alumni.edit', $a->id) }}" class="btn btn-warning btn-sm">Edit</a>
             <form action="{{ route('alumni.destroy', $a->id) }}" method="POST" class="d-inline">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alumni;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AlumniController extends Controller
 {
@@ -19,18 +20,23 @@ class AlumniController extends Controller
     }
 
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'nama_alumni' => 'required|string|max:255',
-        'nim' => 'required|string|max:20|unique:alumni,nim',
-        'tahun_lulus' => 'required|numeric',
-        'jurusan_alumni' => 'required|string|max:100',
-        'prodi_alumni' => 'required|string|max:100',
-    ]);
+    {
+        $validated = $request->validate([
+            'nama_alumni'   => 'required|string|max:255',
+            'nomor_kta'     => 'required|string|max:20|unique:alumni,nomor_kta',
+            'tahun_lulus'   => 'required|numeric',
+            'jurusan_alumni'=> 'required|string|max:100',
+            'prodi_alumni'  => 'required|string|max:100',
+            'username'      => 'required|string|max:100|unique:alumni,username',
+            'password'      => 'required|string|min:6'
+        ]);
 
-    $alumni = Alumni::create($validated);
-    return response()->json(['success' => true, 'data' => $alumni]);
-}
+        // Simpan ke database (password di-hash)
+        $validated['password'] = Hash::make($validated['password']);
+        $alumni = Alumni::create($validated);
+
+        return redirect()->route('alumni.index')->with('success', 'Data alumni berhasil ditambahkan!');
+    }
 
     public function edit($id)
     {
@@ -42,15 +48,25 @@ class AlumniController extends Controller
     {
         $alumni = Alumni::findOrFail($id);
 
-        $request->validate([
-            'nama_alumni' => 'required|string|max:100',
-            'NIM' => 'required|string|max:20|unique:alumni,NIM,' . $id,
-            'tahun_lulus' => 'required|digits:4',
-            'jurusan_alumni' => 'required|string|max:100',
-            'prodi_alumni' => 'required|string|max:100',
+        $validated = $request->validate([
+            'nama_alumni'   => 'required|string|max:255',
+            'nomor_kta'     => 'required|string|max:20|unique:alumni,nomor_kta,' . $id,
+            'tahun_lulus'   => 'required|numeric',
+            'jurusan_alumni'=> 'required|string|max:100',
+            'prodi_alumni'  => 'required|string|max:100',
+            'username'      => 'required|string|max:100|unique:alumni,username,' . $id,
+            'password'      => 'nullable|string|min:6' // boleh kosong saat update
         ]);
 
-        $alumni->update($request->all());
+        // Kalau user isi password baru → hash
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']); // biar password lama tidak dihapus
+        }
+
+        $alumni->update($validated);
+
         return redirect()->route('alumni.index')->with('success', 'Data alumni berhasil diperbarui!');
     }
 

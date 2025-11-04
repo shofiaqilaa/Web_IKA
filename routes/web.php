@@ -18,5 +18,11 @@ Route::get('/', function () {
 });
 
 use App\Http\Controllers\AlumniController;
+use App\Http\Controllers\LokerController;
+use App\Http\Controllers\PerusahaanController;
+use App\Http\Controllers\GaleriUsahaController;
 
+Route::resource('galeri', GaleriUsahaController::class);
+Route::resource('loker', LokerController::class);
 Route::resource('alumni', AlumniController::class);
+Route::resource('perusahaan', PerusahaanController::class);

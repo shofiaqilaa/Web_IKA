@@ -23,7 +23,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="NIM" class="form-label">NIM</label>
+            <label for="nomor_kta" class="form-label">Nomor KTA</label>
             <input type="text" name="NIM" class="form-control" value="{{ old('NIM') }}" required>
         </div>
 
@@ -41,6 +41,16 @@
             <label for="prodi_alumni" class="form-label">Program Studi</label>
             <input type="text" name="prodi_alumni" class="form-control" value="{{ old('prodi_alumni') }}" required>
         </div>
+        <div class="mb-3">
+    <label for="username" class="form-label">Username</label>
+    <input type="text" name="username" id="username" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input type="password" name="password" id="password" class="form-control" required>
+    </div>
+
 
         <button type="submit" class="btn btn-success">Simpan</button>
         <a href="{{ route('alumni.index') }}" class="btn btn-secondary">Kembali</a>

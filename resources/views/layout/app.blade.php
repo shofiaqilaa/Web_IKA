@@ -37,13 +37,31 @@
 
           <!-- Sidebar Dynamic -->
           @foreach($sidebarTables as $table)
-            <li class="nav-item">
-              <a href="{{ url('/' . $table) }}" class="nav-link">
-                <i class="nav-icon fas fa-database"></i>
-                <p>{{ ucfirst(str_replace('_', ' ', $table)) }}</p>
-              </a>
-            </li>
-          @endforeach
+    <li class="nav-item">
+        @switch($table)
+            @case('galeri_usaha')
+                <a href="{{ route('galeri.index') }}" class="nav-link {{ request()->is('galeri*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-images"></i>
+                    <p>Galeri Usaha</p>
+                </a>
+                @break
+
+            @case('master_perusahaan')
+                <a href="{{ url('/master_perusahaan') }}" class="nav-link {{ request()->is('master_perusahaan*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-database"></i>
+                    <p>Perusahaan</p>
+                </a>
+                @break
+
+            @default
+                <a href="{{ url('/' . $table) }}" class="nav-link {{ request()->is($table.'*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-database"></i>
+                    <p>{{ ucfirst(str_replace('_', ' ', $table)) }}</p>
+                </a>
+        @endswitch
+    </li>
+@endforeach
+
 
         </ul>
       </nav>

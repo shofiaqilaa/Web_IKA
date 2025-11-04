@@ -15,7 +15,7 @@ class Alumni extends Model
         'username',
         'password',
         'nama_alumni',
-        'nim',
+        'nomor_kta',
         'tahun_lulus',
         'jurusan_alumni',
         'prodi_alumni'
