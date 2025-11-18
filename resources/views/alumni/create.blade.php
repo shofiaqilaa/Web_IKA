@@ -17,40 +17,36 @@
 
     <form action="{{ route('alumni.store') }}" method="POST">
         @csrf
+
+        <!-- Nama Lengkap -->
         <div class="mb-3">
-            <label for="nama_alumni" class="form-label">Nama Alumni</label>
-            <input type="text" name="nama_alumni" class="form-control" value="{{ old('nama_alumni') }}" required>
+            <label class="form-label">Nama Lengkap</label>
+            <input type="text" name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap') }}" required>
         </div>
 
+        <!-- Angkatan Kuliah -->
         <div class="mb-3">
-            <label for="nomor_kta" class="form-label">Nomor KTA</label>
-            <input type="text" name="NIM" class="form-control" value="{{ old('NIM') }}" required>
+            <label class="form-label">Angkatan Kuliah</label>
+            <input type="number" name="angkatan" class="form-control" value="{{ old('angkatan') }}" required>
         </div>
 
+        <!-- Jurusan -->
         <div class="mb-3">
-            <label for="tahun_lulus" class="form-label">Tahun Lulus</label>
-            <input type="number" name="tahun_lulus" class="form-control" value="{{ old('tahun_lulus') }}" required>
+            <label class="form-label">Jurusan</label>
+            <input type="text" name="jurusan" class="form-control" value="{{ old('jurusan') }}" required>
         </div>
 
+        <!-- Nomor WhatsApp -->
         <div class="mb-3">
-            <label for="jurusan_alumni" class="form-label">Jurusan</label>
-            <input type="text" name="jurusan_alumni" class="form-control" value="{{ old('jurusan_alumni') }}" required>
+            <label class="form-label">Nomor WA Aktif</label>
+            <input type="text" name="no_wa" class="form-control" value="{{ old('no_wa') }}" placeholder="08xxxxxxx" required>
         </div>
 
+        <!-- Alamat -->
         <div class="mb-3">
-            <label for="prodi_alumni" class="form-label">Program Studi</label>
-            <input type="text" name="prodi_alumni" class="form-control" value="{{ old('prodi_alumni') }}" required>
+            <label class="form-label">Alamat</label>
+            <textarea name="alamat" class="form-control" rows="3" required>{{ old('alamat') }}</textarea>
         </div>
-        <div class="mb-3">
-    <label for="username" class="form-label">Username</label>
-    <input type="text" name="username" id="username" class="form-control" required>
-    </div>
-
-    <div class="mb-3">
-    <label for="password" class="form-label">Password</label>
-    <input type="password" name="password" id="password" class="form-control" required>
-    </div>
-
 
         <button type="submit" class="btn btn-success">Simpan</button>
         <a href="{{ route('alumni.index') }}" class="btn btn-secondary">Kembali</a>

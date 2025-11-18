@@ -19,32 +19,41 @@
         @csrf
         @method('PUT')
 
+        <!-- Nama Lengkap -->
         <div class="mb-3">
-            <label for="nama_alumni" class="form-label">Nama Alumni</label>
-            <input type="text" name="nama_alumni" class="form-control" value="{{ old('nama_alumni', $alumni->nama_alumni) }}" required>
+            <label class="form-label">Nama Lengkap</label>
+            <input type="text" name="nama_lengkap" class="form-control"
+                value="{{ old('nama_lengkap', $alumni->nama_lengkap) }}" required>
         </div>
 
+        <!-- Angkatan Kuliah -->
         <div class="mb-3">
-            <label for="nomor_kta" class="form-label">Nomor KTA</label>
-            <input type="text" name="NIM" class="form-control" value="{{ old('NIM', $alumni->NIM) }}" required>
+            <label class="form-label">Angkatan Kuliah</label>
+            <input type="number" name="angkatan" class="form-control"
+                value="{{ old('angkatan', $alumni->angkatan) }}" required>
         </div>
 
+        <!-- Jurusan -->
         <div class="mb-3">
-            <label for="tahun_lulus" class="form-label">Tahun Lulus</label>
-            <input type="number" name="tahun_lulus" class="form-control" value="{{ old('tahun_lulus', $alumni->tahun_lulus) }}" required>
+            <label class="form-label">Jurusan</label>
+            <input type="text" name="jurusan" class="form-control"
+                value="{{ old('jurusan', $alumni->jurusan) }}" required>
         </div>
 
+        <!-- Nomor WA -->
         <div class="mb-3">
-            <label for="jurusan_alumni" class="form-label">Jurusan</label>
-            <input type="text" name="jurusan_alumni" class="form-control" value="{{ old('jurusan_alumni', $alumni->jurusan_alumni) }}" required>
+            <label class="form-label">Nomor WA Aktif</label>
+            <input type="text" name="no_wa" class="form-control"
+                value="{{ old('no_wa', $alumni->no_wa) }}" required>
         </div>
 
+        <!-- Alamat -->
         <div class="mb-3">
-            <label for="prodi_alumni" class="form-label">Program Studi</label>
-            <input type="text" name="prodi_alumni" class="form-control" value="{{ old('prodi_alumni', $alumni->prodi_alumni) }}" required>
+            <label class="form-label">Alamat</label>
+            <textarea name="alamat" class="form-control" rows="3" required>{{ old('alamat', $alumni->alamat) }}</textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Perbarui</button>
+        <button type="submit" class="btn btn-success">Perbarui</button>
         <a href="{{ route('alumni.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>

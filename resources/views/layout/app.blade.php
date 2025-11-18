@@ -35,33 +35,44 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
 
-          <!-- Sidebar Dynamic -->
+          <!-- ========================= -->
+          <!--     MENU KELOLA ADMIN     -->
+          <!-- ========================= -->
+          <li class="nav-item">
+              <a href="{{ route('admin.manage') }}" class="nav-link {{ request()->is('admin/manage*') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-user-cog"></i>
+                  <p>Kelola Admin</p>
+              </a>
+          </li>
+
+          <!-- ========================= -->
+          <!--     SIDEBAR DINAMIS       -->
+          <!-- ========================= -->
           @foreach($sidebarTables as $table)
-    <li class="nav-item">
-        @switch($table)
-            @case('galeri_usaha')
-                <a href="{{ route('galeri.index') }}" class="nav-link {{ request()->is('galeri*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-images"></i>
-                    <p>Galeri Usaha</p>
-                </a>
-                @break
+              <li class="nav-item">
+                  @switch($table)
+                      @case('galeri_usaha')
+                          <a href="{{ route('galeri.index') }}" class="nav-link {{ request()->is('galeri*') ? 'active' : '' }}">
+                              <i class="nav-icon fas fa-images"></i>
+                              <p>Galeri Usaha</p>
+                          </a>
+                          @break
 
-            @case('master_perusahaan')
-                <a href="{{ url('/master_perusahaan') }}" class="nav-link {{ request()->is('master_perusahaan*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-database"></i>
-                    <p>Perusahaan</p>
-                </a>
-                @break
+                      @case('master_perusahaan')
+                          <a href="{{ url('/master_perusahaan') }}" class="nav-link {{ request()->is('master_perusahaan*') ? 'active' : '' }}">
+                              <i class="nav-icon fas fa-building"></i>
+                              <p>Perusahaan</p>
+                          </a>
+                          @break
 
-            @default
-                <a href="{{ url('/' . $table) }}" class="nav-link {{ request()->is($table.'*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-database"></i>
-                    <p>{{ ucfirst(str_replace('_', ' ', $table)) }}</p>
-                </a>
-        @endswitch
-    </li>
-@endforeach
-
+                      @default
+                          <a href="{{ url('/' . $table) }}" class="nav-link {{ request()->is($table.'*') ? 'active' : '' }}">
+                              <i class="nav-icon fas fa-database"></i>
+                              <p>{{ ucfirst(str_replace('_', ' ', $table)) }}</p>
+                          </a>
+                  @endswitch
+              </li>
+          @endforeach
 
         </ul>
       </nav>

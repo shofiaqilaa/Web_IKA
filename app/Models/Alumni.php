@@ -12,14 +12,13 @@ class Alumni extends Model
     protected $table = 'alumni';
 
     protected $fillable = [
-        'username',
-        'password',
-        'nama_alumni',
-        'nomor_kta',
-        'tahun_lulus',
-        'jurusan_alumni',
-        'prodi_alumni'
-    ];
+    'nama_lengkap',
+    'angkatan',
+    'jurusan',
+    'no_wa',
+    'alamat',
+];
+
 
     public $timestamps = false; 
 }

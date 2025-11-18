@@ -1,51 +1,54 @@
 @extends('layout.app')
 
 @section('content')
-<div class="card">
-  <div class="card-header bg-primary text-white">
-    <h3 class="card-title">Data Alumni</h3>
-  </div>
-  <div class="card-body">
-    <a href="{{ route('alumni.create') }}" class="btn btn-success mb-3">
-      <i class="fas fa-plus"></i> Tambah Data
-    </a>
-    <table class="table table-bordered table-striped">
-      <thead class="table-dark">
-        <tr>
-          <th>Nama</th>
-          <th>Nomor KTA</th>
-          <th>Tahun Lulus</th>
-          <th>Jurusan</th>
-          <th>Prodi</th>
-          <th>Username</th>
-          <th>Password (hash)</th>
+<div class="container">
+    <h2>Data Alumni</h2>
 
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($alumni as $a)
-        <tr>
-          <td>{{ $a->nama_alumni }}</td>
-          <td>{{ $a->nomor_kta }}</td>
-          <td>{{ $a->tahun_lulus }}</td>
-          <td>{{ $a->jurusan_alumni }}</td>
-          <td>{{ $a->prodi_alumni }}</td>
-          <td>{{ $a->username }}</td>
-          <td>{{ Str::limit($a->password, 10, '...') }}</td>
+    <a href="{{ route('alumni.create') }}" class="btn btn-primary mb-3">+ Tambah Data</a>
 
-          <td>
-            <a href="{{ route('alumni.edit', $a->id) }}" class="btn btn-warning btn-sm">Edit</a>
-            <form action="{{ route('alumni.destroy', $a->id) }}" method="POST" class="d-inline">
-              @csrf
-              @method('DELETE')
-              <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin?')">Hapus</button>
-            </form>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>No</th>
+                    <th>Nama Lengkap</th>
+                    <th>Angkatan Kuliah</th>
+                    <th>Jurusan</th>
+                    <th>Nomor WA</th>
+                    <th>Alamat</th>
+                    <th width="150px">Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @forelse ($alumni as $index => $item)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $item->nama_lengkap }}</td>
+                    <td>{{ $item->angkatan }}</td>
+                    <td>{{ $item->jurusan }}</td>
+                    <td>{{ $item->no_wa }}</td>
+                    <td>{{ $item->alamat }}</td>
+
+                    <td>
+                        <a href="{{ route('alumni.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
+
+                        <form action="{{ route('alumni.destroy', $item->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus data?')">
+                                Hapus
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="text-center">Belum ada data alumni</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 @endsection
