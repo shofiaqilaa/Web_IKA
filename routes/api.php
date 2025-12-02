@@ -18,4 +18,4 @@ Route::post('/alumni', [AlumniController::class, 'store']); // tambah data
 Route::post('/register', [AlumniAuthController::class, 'register']);
 Route::post('/login', [AlumniAuthController::class, 'login']);
 Route::get('/loker', [LokerController::class, 'apiIndex']);
-Route::get('/events', [EventController::class, 'index']);
+Route::get('/events', [EventController::class, 'apiIndex']);
