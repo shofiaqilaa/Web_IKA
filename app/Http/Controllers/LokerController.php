@@ -18,11 +18,21 @@ class LokerController extends Controller
     }
 
     public function apiIndex()
-    {
-    return response()->json(
-        Loker::with('perusahaan')->get()
-    );
-    }
+{
+    $loker = Loker::with('perusahaan')->get();
+
+    $loker->map(function ($item) {
+        if ($item->gambar) {
+            $item->gambar_url = url($item->gambar);
+        } else {
+            $item->gambar_url = null;
+        }
+        return $item;
+    });
+
+    return response()->json($loker);
+}
+
 
     /**
      * Menampilkan form tambah loker

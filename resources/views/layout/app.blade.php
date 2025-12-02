@@ -35,15 +35,6 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
 
-          <!-- ========================= -->
-          <!--     MENU KELOLA ADMIN     -->
-          <!-- ========================= -->
-          <li class="nav-item">
-              <a href="{{ route('admin.manage') }}" class="nav-link {{ request()->is('admin/manage*') ? 'active' : '' }}">
-                  <i class="nav-icon fas fa-user-cog"></i>
-                  <p>Kelola Admin</p>
-              </a>
-          </li>
 
           <!-- ========================= -->
           <!--     SIDEBAR DINAMIS       -->

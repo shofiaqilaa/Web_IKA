@@ -9,8 +9,6 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register()
     {
@@ -19,38 +17,52 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
     public function boot()
-{
-    view()->composer('*', function ($view) {
-        $tables = \DB::select('SHOW TABLES');
-        $dbName = env('DB_DATABASE');
-        $key = 'Tables_in_' . $dbName;
-        $tableNames = array_map(fn($t) => $t->$key, $tables);
+    {
+        view()->composer('*', function ($view) {
 
-        // Filter tabel yang mau ditampilkan di sidebar
-        $filteredTables = collect($tableNames)
-            ->filter(function ($table) {
-                // daftar tabel yang boleh tampil di sidebar
-                return in_array($table, [
-                    'alumni',
-                    'loker',
-                    'master_perusahaan', // tetap ambil tabel ini
-                    'galeri_usaha',
-                ]);
-            })
-            ->map(function ($table) {
-                // tampilkan nama rapi di sidebar
-                if ($table === 'master_perusahaan') {
-                    return 'perusahaan'; // alias untuk tampil di sidebar
-                }
-                return $table;
-            })
-            ->values();
+            // Ambil semua tabel dari database
+            $dbName = env('DB_DATABASE');
+            $tables = DB::select('SHOW TABLES');
+            $key = 'Tables_in_' . $dbName;
 
-        $view->with('sidebarTables', $filteredTables);
-    });
-}
+            $tableNames = array_map(function ($table) use ($key) {
+                return $table->$key;
+            }, $tables);
+
+            // Tabel yang boleh muncul di sidebar
+            $allowedTables = [
+                'alumni',
+                'loker',
+                'master_perusahaan',
+                'galeri_usaha',
+                'events'
+            ];
+
+            // Filter tabel lalu ubah nama tampilannya
+            $filteredTables = collect($tableNames)
+                ->filter(function ($table) use ($allowedTables) {
+                    return in_array($table, $allowedTables);
+                })
+                ->map(function ($table) {
+
+                    // alias master_perusahaan → perusahaan
+                    if ($table === 'master_perusahaan') {
+                        return 'perusahaan';
+                    }
+
+                    // alias events → event
+                    if ($table === 'events') {
+                        return 'event';
+                    }
+
+                    return $table;
+                })
+                ->values();
+
+            // kirim ke semua view
+            $view->with('sidebarTables', $filteredTables);
+        });
+    }
 }
