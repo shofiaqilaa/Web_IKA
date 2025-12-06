@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Alumni;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class AlumniController extends Controller
 {
@@ -20,20 +19,53 @@ class AlumniController extends Controller
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'nama_lengkap' => 'required|string',
-        'angkatan'     => 'required|integer',
-        'jurusan'      => 'required|string',
-        'no_wa'        => 'required|string',
-        'alamat'       => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'nama_lengkap'            => 'required|string|max:255',
+            'tahun_lulus'             => 'required|integer',
+            'no_wa'                   => 'required|string|max:20',
+            'jurusan'                 => 'required|string|max:255',
 
-    Alumni::create($request->all());
+            'metode_pengiriman_kta'   => 'required|string|max:255',
+            'jumlah_kta'              => 'required|integer',
 
-    return redirect()->route('alumni.index')->with('success', 'Data berhasil ditambahkan');
-}
+            'pas_foto'                => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'bukti_transfer_kta'      => 'required|image|mimes:jpg,jpeg,png|max:2048',
 
+            'bersedia_donasi'         => 'required|string',
+
+            'jumlah_donasi'           => 'nullable|integer',
+            'bukti_transfer_donasi'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // Upload file
+        $pasFotoPath = $request->file('pas_foto')->store('pas_foto', 'public');
+        $buktiKtaPath = $request->file('bukti_transfer_kta')->store('bukti_kta', 'public');
+
+        $buktiDonasiPath = null;
+        if ($request->hasFile('bukti_transfer_donasi')) {
+            $buktiDonasiPath = $request->file('bukti_transfer_donasi')->store('bukti_donasi', 'public');
+        }
+
+        Alumni::create([
+            'nama_lengkap'            => $request->nama_lengkap,
+            'tahun_lulus'             => $request->tahun_lulus,
+            'no_wa'                   => $request->no_wa,
+            'jurusan'                 => $request->jurusan,
+
+            'metode_pengiriman_kta'   => $request->metode_pengiriman_kta,
+            'jumlah_kta'              => $request->jumlah_kta,
+
+            'pas_foto'                => $pasFotoPath,
+            'bukti_transfer_kta'      => $buktiKtaPath,
+
+            'bersedia_donasi'         => $request->bersedia_donasi,
+            'jumlah_donasi'           => $request->jumlah_donasi,
+            'bukti_transfer_donasi'   => $buktiDonasiPath,
+        ]);
+
+        return redirect()->route('alumni.index')->with('success', 'Data berhasil ditambahkan');
+    }
 
     public function edit($id)
     {
@@ -42,28 +74,54 @@ class AlumniController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'nama_lengkap' => 'required|string',
-        'angkatan'     => 'required|integer',
-        'jurusan'      => 'required|string',
-        'no_wa'        => 'required|string',
-        'alamat'       => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'nama_lengkap'            => 'required|string|max:255',
+            'tahun_lulus'             => 'required|integer',
+            'no_wa'                   => 'required|string|max:20',
+            'jurusan'                 => 'required|string|max:255',
 
-    $alumni = Alumni::findOrFail($id);
+            'metode_pengiriman_kta'   => 'required|string|max:255',
+            'jumlah_kta'              => 'required|integer',
 
-    $alumni->update([
-        'nama_lengkap' => $request->nama_lengkap,
-        'angkatan'     => $request->angkatan,
-        'jurusan'      => $request->jurusan,
-        'no_wa'        => $request->no_wa,
-        'alamat'       => $request->alamat,
-    ]);
+            'pas_foto'                => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'bukti_transfer_kta'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
 
-    return redirect()->route('alumni.index')->with('success', 'Data berhasil diperbarui');
-}
+            'bersedia_donasi'         => 'required|string',
+            'jumlah_donasi'           => 'nullable|integer',
+            'bukti_transfer_donasi'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
+        $alumni = Alumni::findOrFail($id);
+
+        // Upload file baru jika ada
+        if ($request->hasFile('pas_foto')) {
+            $alumni->pas_foto = $request->file('pas_foto')->store('pas_foto', 'public');
+        }
+
+        if ($request->hasFile('bukti_transfer_kta')) {
+            $alumni->bukti_transfer_kta = $request->file('bukti_transfer_kta')->store('bukti_kta', 'public');
+        }
+
+        if ($request->hasFile('bukti_transfer_donasi')) {
+            $alumni->bukti_transfer_donasi = $request->file('bukti_transfer_donasi')->store('bukti_donasi', 'public');
+        }
+
+        $alumni->update([
+            'nama_lengkap'            => $request->nama_lengkap,
+            'tahun_lulus'             => $request->tahun_lulus,
+            'no_wa'                   => $request->no_wa,
+            'jurusan'                 => $request->jurusan,
+
+            'metode_pengiriman_kta'   => $request->metode_pengiriman_kta,
+            'jumlah_kta'              => $request->jumlah_kta,
+
+            'bersedia_donasi'         => $request->bersedia_donasi,
+            'jumlah_donasi'           => $request->jumlah_donasi,
+        ]);
+
+        return redirect()->route('alumni.index')->with('success', 'Data berhasil diperbarui');
+    }
 
     public function destroy($id)
     {

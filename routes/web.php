@@ -26,6 +26,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/manage', [AdminManagementController::class, 'index'])->name('admin.manage');
     Route::get('/admin/manage/create', [AdminManagementController::class, 'create'])->name('admin.manage.create');
     Route::post('/admin/manage/store', [AdminManagementController::class, 'store'])->name('admin.manage.store');
+    Route::post('/register', [AlumniController::class, 'store']);
 
     // CRUD Event (seperti loker)
     
