@@ -12,24 +12,16 @@ class Alumni extends Model
     protected $table = 'alumni';
 
     protected $fillable = [
-        'nama_lengkap',
-        'angkatan_kuliah',
-        'no_wa',
-        'jurusan',
-
-        // KTA
-        'metode_pengiriman',
-        'alamat_pengiriman',
-        'jumlah_pembelian',
-        'foto_profil',              // file
-        'bukti_transfer_kta',       // file
-
-        // Donasi
-        'bersedia_donasi',          // Ya / Tidak
-        'jumlah_donasi',            // boleh null
-        'bukti_transfer_donasi',    // boleh null
-
-        // Tambahan opsional
-        'status_verifikasi',        // default: pending
+    'nama_lengkap',
+    'tahun_lulus',
+    'no_wa',
+    'jurusan',
+    'metode_pengiriman_kta',
+    'jumlah_kta',
+    'pas_foto',
+    'bukti_transfer_kta',
+    'bersedia_donasi',
+    'jumlah_donasi',
+    'bukti_transfer_donasi',
     ];
 }
