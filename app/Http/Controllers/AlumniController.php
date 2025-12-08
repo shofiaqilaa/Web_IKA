@@ -18,7 +18,7 @@ class AlumniController extends Controller
         return view('alumni.create');
     }
 
-    public function store(Request $request)
+    public function storeApi(Request $request)
     {
         $request->validate([
             'nama_lengkap'            => 'required|string|max:255',
