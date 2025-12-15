@@ -32,7 +32,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('/admin/manage/store', [AdminManagementController::class, 'store'])->name('admin.manage.store');
 
     // CRUD Resource
-    Route::resource('galeri', GaleriUsahaController::class);
+    Route::resource('/galeri', GaleriController::class);
     Route::resource('loker', LokerController::class);
     Route::resource('alumni', AlumniController::class);       // ADMIN CRUD ALUMNI
     Route::resource('perusahaan', PerusahaanController::class);
