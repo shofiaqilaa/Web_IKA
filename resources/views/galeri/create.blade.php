@@ -1,22 +1,52 @@
 @extends('layout.app')
 
 @section('content')
-<h1>Tambah Galeri</h1>
+<div class="container">
+    <h2>Tambah Galeri</h2>
 
-<form action="{{ route('galeri.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <label>Judul Usaha</label>
-    <input type="text" name="judul" value="{{ old('judul') }}" required><br>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Perhatian!</strong> Ada kesalahan pada inputan.<br><br>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-    <label>Deskripsi</label>
-    <textarea name="deskripsi" required>{{ old('deskripsi') }}</textarea><br>
+    <form action="{{ route('galeri.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
 
-    <label>Nama Pemilik/Alumni</label>
-    <input type="text" name="nama_alumni" value="{{ old('nama_alumni') }}" required><br>
+        <div class="mb-3">
+            <label class="form-label">Judul Usaha</label>
+            <input type="text" name="judul" class="form-control" value="{{ old('judul') }}" required>
+        </div>
 
-    <label>Gambar Logo/Foto</label>
-    <input type="file" name="foto" required><br>
+        <div class="mb-3">
+            <label class="form-label">Deskripsi</label>
+            <textarea name="deskripsi" class="form-control" required>{{ old('deskripsi') }}</textarea>
+        </div>
 
-    <button type="submit">Simpan</button>
-</form>
+        <div class="mb-3">
+            <label class="form-label">Nama Pemilik/Alumni</label>
+            <select name="id_alumni" class="form-control" required>
+                <option value="">-- Pilih Alumni --</option>
+                @foreach($alumnis as $alumni)
+                    <option value="{{ $alumni->id }}" {{ old('id_alumni') == $alumni->id ? 'selected' : '' }}>
+                        {{ $alumni->nama_lengkap }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Gambar Logo/Foto (jpg/png)</label>
+            <input type="file" name="foto" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">Simpan</button>
+        <a href="{{ route('galeri.index') }}" class="btn btn-secondary">Kembali</a>
+    </form>
+</div>
 @endsection

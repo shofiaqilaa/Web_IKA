@@ -65,3 +65,15 @@ Route::post('/galeri', [GaleriController::class, 'apiStore']);
 Route::get('/galeri/{id}', [GaleriController::class, 'apiShow']);
 Route::post('/galeri/{id}', [GaleriController::class, 'apiUpdate']);
 Route::delete('/galeri/{id}', [GaleriController::class, 'apiDelete']);
+
+// Serve gallery images through Laravel so CORS headers are applied
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
+
+Route::get('/files/galeri/{filename}', function ($filename) {
+    $path = storage_path('app/public/galeri/' . $filename);
+    if (!file_exists($path)) {
+        return response()->json(['message' => 'Not Found'], 404);
+    }
+    return response()->file($path);
+});

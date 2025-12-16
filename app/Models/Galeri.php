@@ -9,32 +9,53 @@ class Galeri extends Model
 {
     use HasFactory;
 
-    protected $table = 'galeri_usaha';
+    protected $table = 'galeri';
 
+    /**
+     * Field yang boleh di–mass assignment
+     */
     protected $fillable = [
         'judul',
         'deskripsi',
-        'gambar',
-        'id_alumni',
+        'foto',
+        'id_alumni', // ✅ WAJIB agar relasi tersimpan
     ];
 
+    /**
+     * Casting tipe data
+     */
     protected $casts = [
         'id_alumni' => 'integer',
     ];
 
-    // Relasi: setiap galeri dimiliki oleh 1 alumni
+    /**
+     * Relasi:
+     * 1 Galeri dimiliki oleh 1 Alumni
+     */
     public function alumni()
     {
         return $this->belongsTo(Alumni::class, 'id_alumni');
     }
 
-    // Accessor otomatis untuk memberikan URL gambar lengkap
+    /**
+     * Accessor: URL lengkap gambar
+     * bisa dipanggil dengan $galeri->gambar_url
+     */
     public function getGambarUrlAttribute()
     {
-        if (!$this->gambar) {
+        if (empty($this->foto)) {
             return null;
         }
 
-        return asset('storage/' . $this->gambar);
+        return asset('storage/' . $this->foto);
+    }
+
+    /**
+     * Backward compatibility
+     * jika view lama pakai $galeri->foto_url
+     */
+    public function getFotoUrlAttribute()
+    {
+        return $this->getGambarUrlAttribute();
     }
 }
