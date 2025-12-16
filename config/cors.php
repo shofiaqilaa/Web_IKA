@@ -18,6 +18,8 @@ return [
     // Allow CORS also for non-API routes (images served from storage/public)
     // during development so Flutter Web can load images from the backend.
     'paths' => ['api/*', 'sanctum/csrf-cookie', '*'],
+    'storage/*',  // <--- TAMBAHKAN INI (PENTING!)
+        'storage/app/public/*',
 
     'allowed_methods' => ['*'],
 

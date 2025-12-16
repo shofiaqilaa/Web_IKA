@@ -20,6 +20,8 @@
             <thead class="table-dark">
                 <tr>
                     <th>Judul Event</th>
+                    <th>Kategori</th>
+                    <th>Tujuan Kegiatan</th>
                     <th>Deskripsi</th>
                     <th>Tanggal</th>
                     <th>Gambar</th>
@@ -31,6 +33,8 @@
                 @forelse ($events as $e)
                 <tr>
                     <td>{{ $e->judul_event }}</td>
+                    <td>{{ $e->kategori ?? '-' }}</td>
+                    <td>{{ Str::limit($e->tujuan_kegiatan ?? '-', 50) }}</td>
                     <td>{{ Str::limit($e->deskripsi_event, 50) }}</td>
                     <td>{{ $e->tanggal_event }}</td>
 

@@ -32,6 +32,20 @@
                 <input type="file" name="gambar_event" class="form-control">
             </div>
 
+            <div class="mb-3">
+                <label>Kategori Event</label>
+                <select name="kategori" class="form-control" required>
+                    <option value="berita" {{ old('kategori') == 'berita' ? 'selected' : '' }}>Berita</option>
+                    <option value="beasiswa" {{ old('kategori') == 'beasiswa' ? 'selected' : '' }}>Beasiswa</option>
+                    <option value="donasi" {{ old('kategori') == 'donasi' ? 'selected' : '' }}>Donasi</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label>Tujuan Kegiatan (opsional)</label>
+                <textarea name="tujuan_kegiatan" class="form-control" rows="3">{{ old('tujuan_kegiatan') }}</textarea>
+            </div>
+
             <button type="submit" class="btn btn-primary">Simpan</button>
         </form>
 

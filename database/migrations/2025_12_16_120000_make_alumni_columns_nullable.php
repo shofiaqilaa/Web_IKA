@@ -53,7 +53,8 @@ return new class extends Migration
 
             // Add timestamps if they don't exist (optional)
             if (!Schema::hasColumn('alumni', 'created_at') && !Schema::hasColumn('alumni', 'updated_at')) {
-                $table->timestamps()->nullable();
+                // timestamps() does not return a column object, so don't chain ->nullable()
+                $table->timestamps();
             }
         });
     }

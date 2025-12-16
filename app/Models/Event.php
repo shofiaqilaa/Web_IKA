@@ -14,5 +14,20 @@ class Event extends Model
         'deskripsi_event',
         'tanggal_event',
         'gambar_event',
+        'kategori',
+        'tujuan_kegiatan',
     ];
+
+    // Append derived URL for API responses
+    protected $appends = [
+        'gambar_url',
+    ];
+
+    public function getGambarUrlAttribute()
+    {
+        if ($this->gambar_event) {
+            return url('storage/' . $this->gambar_event);
+        }
+        return null;
+    }
 }
