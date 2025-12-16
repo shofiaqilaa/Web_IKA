@@ -16,7 +16,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($galeris as $galeri)
+        @foreach($galeri as $galeri)
         <tr>
             <td>{{ $loop->iteration }}</td>
             <td>{{ $galeri->judul }}</td>

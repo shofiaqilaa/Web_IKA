@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\LokerController;
 use App\Http\Controllers\PerusahaanController;
-use App\Http\Controllers\GaleriUsahaController;
+use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminManagementController;
 use App\Http\Controllers\EventController;
