@@ -98,6 +98,10 @@ class LokerController extends Controller
             $file = $request->file('gambar');
             $filename = time().'_'.$file->getClientOriginalName();
             $file->move(public_path('uploads/loker'), $filename);
+            // hapus gambar lama jika ada
+            if ($loker->gambar && file_exists(public_path($loker->gambar))) {
+                @unlink(public_path($loker->gambar));
+            }
             $validated['gambar'] = 'uploads/loker/'.$filename;
         }
 

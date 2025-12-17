@@ -24,7 +24,18 @@
         <tr>
           <td>{{ $l->judul_loker }}</td>
           <td>{{ Str::limit($l->deskripsi_loker, 50) }}</td>
-          <td>{{ $l->perusahaan->nama_perusahaan ?? '-' }}</td>
+          <td>
+            @if($l->perusahaan)
+              @if($l->perusahaan->logo)
+                <img src="{{ asset($l->perusahaan->logo) }}" width="60" class="me-2">
+              @endif
+              <strong>{{ $l->perusahaan->nama_perusahaan }}</strong>
+              <div><small>{{ $l->perusahaan->lokasi ?? $l->perusahaan->alamat_perusahaan }}</small></div>
+              <div><small>Rating: {{ $l->perusahaan->rating ?? '-' }}</small></div>
+            @else
+              -
+            @endif
+          </td>
           <td>
   @if ($l->gambar)
       <img src="{{ asset($l->gambar) }}" width="100">

@@ -18,6 +18,12 @@ class MasterPerusahaan extends Model
         'alamat_perusahaan',
         'kontak_perusahaan',
         'deskripsi_perusahaan',
+        'logo',
+        'rating',
+        'lokasi',
+        'tentang_kami',
+        'visi',
+        'misi',
     ];
 
     public function loker()

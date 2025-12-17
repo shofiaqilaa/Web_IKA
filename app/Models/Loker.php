@@ -27,4 +27,13 @@ class Loker extends Model
     {
         return $this->belongsTo(MasterPerusahaan::class, 'id_perusahaan', 'id_perusahaan');
     }
+
+    public function getGambarUrlAttribute()
+    {
+        if ($this->gambar) {
+            return asset($this->gambar);
+        }
+
+        return null;
+    }
 }

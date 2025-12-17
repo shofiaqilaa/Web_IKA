@@ -13,9 +13,11 @@
     <table class="table table-bordered table-striped">
       <thead class="table-dark">
         <tr>
+          <th>Logo</th>
           <th>Nama Perusahaan</th>
-          <th>Alamat</th>
+          <th>Lokasi</th>
           <th>Kontak</th>
+          <th>Rating</th>
           <th>Deskripsi</th>
           <th>Aksi</th>
         </tr>
@@ -23,10 +25,18 @@
       <tbody>
         @foreach ($perusahaan as $p)
         <tr>
+          <td>
+            @if($p->logo)
+              <img src="{{ asset($p->logo) }}" width="80">
+            @else
+              <small>-</small>
+            @endif
+          </td>
           <td>{{ $p->nama_perusahaan }}</td>
-          <td>{{ $p->alamat_perusahaan }}</td>
+          <td>{{ $p->lokasi ?? $p->alamat_perusahaan }}</td>
           <td>{{ $p->kontak_perusahaan }}</td>
-          <td>{{ $p->deskripsi_perusahaan }}</td>
+          <td>{{ $p->rating ?? '-' }}</td>
+          <td>{{ Str::limit($p->deskripsi_perusahaan, 80) }}</td>
           <td>
             <a href="{{ route('perusahaan.edit', $p->id_perusahaan) }}" class="btn btn-warning btn-sm">Edit</a>
             <form action="{{ route('perusahaan.destroy', $p->id_perusahaan) }}" method="POST" class="d-inline">
