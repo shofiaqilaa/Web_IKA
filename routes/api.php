@@ -28,8 +28,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 */
 Route::get('/alumni', [AlumniController::class, 'index']);        // ambil semua data
 Route::post('/alumni', [AlumniController::class, 'storeApi']);    // tambah data
-Route::post('/login', [AlumniAuthController::class, 'login']);    // login alumni
-
+Route::post('/login-alumni', [AlumniAuthController::class, 'login']);    // login alumni
+Route::post('/register-alumni', [AlumniAuthController::class, 'register']);
 
 /*
 |--------------------------------------------------------------------------
@@ -77,3 +77,4 @@ Route::get('/files/galeri/{filename}', function ($filename) {
     }
     return response()->file($path);
 });
+

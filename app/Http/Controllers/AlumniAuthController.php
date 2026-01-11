@@ -5,69 +5,163 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Alumni;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\Mail\AlumniRegisterMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class AlumniAuthController extends Controller
 {
-    // 🔹 Registrasi alumni baru
     public function register(Request $request)
     {
         $request->validate([
-            'username' => 'required|unique:alumni',
-            'password' => 'required|min:6',
-            'nama_alumni' => 'required',
-            'nomor_kta' => 'required|unique:alumni,nomor_kta',
+            'nama_lengkap' => 'required',
+            'email' => 'required|email|unique:alumni,email',
             'tahun_lulus' => 'required',
-            'jurusan_alumni' => 'required',
-            'prodi_alumni' => 'required'
+            'jurusan' => 'required',
+            'no_wa' => 'required',
+            'metode_pengiriman_kta' => 'required|in:diantar,diambil',
+            'jumlah_kta' => 'required|integer|min:1',
+            'bersedia_donasi' => 'required'
         ]);
 
-        $alumni = Alumni::create([
-            'username' => $request->username,
-            'password' => Hash::make($request->password), // hash password biar aman
-            'nama_alumni' => $request->nama_alumni,
-            'nomor_kta' => $request->nomor_kta,
-            'tahun_lulus' => $request->tahun_lulus,
-            'jurusan_alumni' => $request->jurusan_alumni,
-            'prodi_alumni' => $request->prodi_alumni
-        ]);
+        $bersediaDonasi = filter_var(
+            $request->bersedia_donasi,
+            FILTER_VALIDATE_BOOLEAN
+        );
 
-        return response()->json([
-            'message' => 'Registrasi berhasil',
-            'data' => $alumni
-        ], 201);
-    }
-
-    // 🔹 Login alumni (pakai username ATAU nomor_kta)
-    public function login(Request $request)
-    {
-        $request->validate([
-            'login' => 'required', // bisa username atau nomor_kta
-            'password' => 'required'
-        ]);
-
-        // cari berdasarkan username ATAU nomor_kta
-        $alumni = Alumni::where('username', $request->login)
-                        ->orWhere('nomor_kta', $request->login)
-                        ->first();
-
-        if (!$alumni || !Hash::check($request->password, $alumni->password)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Login gagal, periksa kembali username/nomor KTA dan password.'
-            ], 401);
+        $alamat = null;
+        if ($request->metode_pengiriman_kta === 'diantar') {
+            $request->validate(['alamat' => 'required']);
+            $alamat = $request->alamat;
         }
+
+        $jumlahDonasi = null;
+        if ($bersediaDonasi) {
+            $request->validate([
+                'jumlah_donasi' => 'required|numeric|min:1000'
+            ]);
+            $jumlahDonasi = $request->jumlah_donasi;
+        }
+
+        // ===== GENERATE NO KTA BARU =====
+
+// mapping jurusan ke kode
+$kodeJurusan = match ($request->jurusan) {
+    'Administrasi Bisnis' => '01',
+    'Akuntansi' => '02',
+    'Teknik Elektro' => '03',
+    'Teknik Mesin' => '04',
+    'Teknik Sipil' => '05',
+    default => '00'
+};
+
+// tahun lulus
+$tahun = $request->tahun_lulus;
+
+// ambil data terakhir berdasarkan tahun & jurusan
+$last = Alumni::where('tahun_lulus', $tahun)
+    ->where('jurusan', $request->jurusan)
+    ->orderBy('no_kta', 'desc')
+    ->first();
+
+// tentukan urutan
+if ($last) {
+    $lastNumber = (int) substr($last->no_kta, -3);
+    $urutan = $lastNumber + 1;
+} else {
+    $urutan = 1;
+}
+
+// format 001, 002, dst
+$urutanFormatted = str_pad($urutan, 3, '0', STR_PAD_LEFT);
+
+// gabungkan jadi No KTA
+$noKta = $tahun . $kodeJurusan . $urutanFormatted;
+
+// ===== END NO KTA =====
+
+
+        $plainPassword = Str::random(8);
+
+        Alumni::create([
+    'no_kta' => $noKta,
+    'nama_lengkap' => $request->nama_lengkap,
+    'email' => $request->email,
+    'password' => Hash::make($plainPassword),
+    'tahun_lulus' => $request->tahun_lulus,
+    'angkatan' => $request->tahun_lulus,
+    'jurusan' => $request->jurusan,
+    'metode_pengiriman_kta' => $request->metode_pengiriman_kta,
+    'jumlah_kta' => $request->jumlah_kta,
+    'bersedia_donasi' => $bersediaDonasi,
+    'jumlah_donasi' => $jumlahDonasi,
+    'no_wa' => $request->no_wa,
+    'alamat' => $alamat
+]);
+
+// KIRIM EMAIL KE ALUMNI
+Mail::to($request->email)->send(
+    new AlumniRegisterMail(
+        $noKta,
+        $request->email,
+        $plainPassword
+    )
+);
+
 
         return response()->json([
             'success' => true,
-            'message' => 'Login berhasil!',
+            'message' => 'Registrasi berhasil',
+            'data' => [
+                'no_kta' => $noKta,
+                'password' => $plainPassword
+            ]
+        ], 201);
+    }
+        public function login(Request $request)
+    {
+        // 1. Validasi input
+        $request->validate([
+            'no_kta' => 'required',
+            'password' => 'required'
+        ]);
+
+        // 2. Cari alumni berdasarkan No KTA
+        $noKta = trim($request->no_kta);
+        $password = trim($request->password);
+
+        $alumni = Alumni::where('no_kta', $noKta)->first();
+
+
+        // 3. Jika alumni tidak ditemukan
+        if (!$alumni) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No KTA tidak ditemukan'
+            ], 404);
+        }
+
+        // 4. Cek password
+        if (!Hash::check($password, $alumni->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Password salah'
+            ], 401);
+        }
+
+        // 5. Login berhasil
+        return response()->json([
+            'success' => true,
+            'message' => 'Login berhasil',
             'data' => [
                 'id' => $alumni->id,
-                'nama_alumni' => $alumni->nama_alumni,
-                'username' => $alumni->username,
-                'nomor_kta' => $alumni->nomor_kta,
-                'jurusan_alumni' => $alumni->jurusan_alumni,
-                'prodi_alumni' => $alumni->prodi_alumni
+                'no_kta' => $alumni->no_kta,
+                'nama_lengkap' => $alumni->nama_lengkap,
+                'email' => $alumni->email,
+                'jurusan' => $alumni->jurusan,
+                'tahun_lulus' => $alumni->tahun_lulus
             ]
-        ]);
+        ], 200);
     }
 }

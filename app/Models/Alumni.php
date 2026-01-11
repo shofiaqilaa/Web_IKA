@@ -2,32 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Alumni extends Model
 {
-    use HasFactory;
-
-    // Table 'alumni' does not have created_at/updated_at columns,
-    // disable automatic timestamps to avoid SQL errors.
-    public $timestamps = false;
-
     protected $table = 'alumni';
 
     protected $fillable = [
+    'no_kta',
     'nama_lengkap',
-    'angkatan',
+    'email',
+    'password',
     'tahun_lulus',
-    'alamat',
-    'no_wa',
+    'angkatan',
     'jurusan',
     'metode_pengiriman_kta',
     'jumlah_kta',
-    'pas_foto',
-    'bukti_transfer_kta',
     'bersedia_donasi',
     'jumlah_donasi',
-    'bukti_transfer_donasi',
+    'no_wa',
+    'alamat'
+];
+
+
+    protected $hidden = [
+        'password'
     ];
 }
