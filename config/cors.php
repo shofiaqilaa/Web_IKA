@@ -2,24 +2,12 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Cross-Origin Resource Sharing (CORS) Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure your settings for cross-origin resource sharing
-    | or "CORS". This determines what cross-origin operations may execute
-    | in web browsers. You are free to adjust these settings as needed.
-    |
-    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-    |
-    */
-
-    // Allow CORS also for non-API routes (images served from storage/public)
-    // during development so Flutter Web can load images from the backend.
-    'paths' => ['api/*', 'sanctum/csrf-cookie', '*'],
-    'storage/*',  // <--- TAMBAHKAN INI (PENTING!)
-        'storage/app/public/*',
+    'paths' => [
+        'api/*',
+        'sanctum/csrf-cookie',
+        'storage/*',
+        'storage/app/public/*'
+    ],
 
     'allowed_methods' => ['*'],
 
