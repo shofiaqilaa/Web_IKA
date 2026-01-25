@@ -8,6 +8,7 @@ use App\Http\Controllers\AlumniAuthController;
 use App\Http\Controllers\LokerController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GaleriController; // ← tambahkan controller galeri
+use App\Http\Controllers\AdminController;  // ← tambahkan controller admin
 
 
 
@@ -49,6 +50,15 @@ Route::get('/events', [EventController::class, 'apiIndex']);      // list event
 
 /*
 |--------------------------------------------------------------------------
+| Admin
+|--------------------------------------------------------------------------
+*/
+Route::get('/admin', [AdminController::class, 'apiIndex']);       // ambil semua admin
+Route::get('/admin/{id}', [AdminController::class, 'apiShow']);   // ambil detail admin
+
+
+/*
+|--------------------------------------------------------------------------
 | Galeri Usaha (BARU)
 |--------------------------------------------------------------------------
 | CRUD:
@@ -63,18 +73,20 @@ Route::get('/events', [EventController::class, 'apiIndex']);      // list event
 Route::get('/galeri', [GaleriController::class, 'apiIndex']);
 Route::post('/galeri', [GaleriController::class, 'apiStore']);
 Route::get('/galeri/{id}', [GaleriController::class, 'apiShow']);
-Route::post('/galeri/{id}', [GaleriController::class, 'apiUpdate']);
+Route::put('/galeri/{id}', [GaleriController::class, 'apiUpdate']);
 Route::delete('/galeri/{id}', [GaleriController::class, 'apiDelete']);
 
-// Serve gallery images through Laravel so CORS headers are applied
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Response;
-
-Route::get('/files/galeri/{filename}', function ($filename) {
+// Serve gallery images with CORS headers applied for Flutter
+Route::get('/image/galeri/{filename}', function ($filename) {
     $path = storage_path('app/public/galeri/' . $filename);
     if (!file_exists($path)) {
-        return response()->json(['message' => 'Not Found'], 404);
+        abort(404);
     }
-    return response()->file($path);
-});
+    return response()->file($path, [
+        'Content-Type' => mime_content_type($path),
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+        'Access-Control-Allow-Headers' => '*',
+    ]);
+})->name('image.galeri');
 
