@@ -120,18 +120,19 @@ class GaleriController extends Controller
                 'id' => $item->id,
                 'judul' => $item->judul,
                 'deskripsi' => $item->deskripsi,
-                'foto' => $item->foto ? asset('storage/' . $item->foto) : null,
+                'foto' => $item->foto ? route('image.galeri', ['filename' => basename($item->foto)]) : null,
                 'id_alumni' => $item->id_alumni,
                 'nama_alumni' => $item->alumni ? $item->alumni->nama : null,
-                'created_at' => $item->created_at ?? null,
-                'updated_at' => $item->updated_at ?? null,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at,
             ];
         });
 
         return response()->json([
             'status' => true,
+            'message' => 'Data galeri berhasil diambil',
             'data' => $data,
-        ]);
+        ], 200);
     }
 
     // POST tambah galeri (API)
@@ -165,13 +166,13 @@ class GaleriController extends Controller
                 'id' => $data->id,
                 'judul' => $data->judul,
                 'deskripsi' => $data->deskripsi,
-                'foto' => $data->foto ? asset('storage/' . $data->foto) : null,
+                'foto' => $data->foto ? route('image.galeri', ['filename' => basename($data->foto)]) : null,
                 'id_alumni' => $data->id_alumni,
                 'nama_alumni' => $data->alumni ? $data->alumni->nama : null,
                 'created_at' => $data->created_at,
                 'updated_at' => $data->updated_at,
             ],
-        ]);
+        ], 201);
     }
 
     // GET detail galeri (API)
@@ -184,17 +185,18 @@ class GaleriController extends Controller
 
         return response()->json([
             'status' => true,
+            'message' => 'Data galeri ditemukan',
             'data' => [
                 'id' => $data->id,
                 'judul' => $data->judul,
                 'deskripsi' => $data->deskripsi,
-                'foto' => $data->foto ? asset('storage/' . $data->foto) : null,
+                'foto' => $data->foto ? route('image.galeri', ['filename' => basename($data->foto)]) : null,
                 'id_alumni' => $data->id_alumni,
                 'nama_alumni' => $data->alumni ? $data->alumni->nama : null,
                 'created_at' => $data->created_at,
                 'updated_at' => $data->updated_at,
             ],
-        ]);
+        ], 200);
     }
 
     // UPDATE galeri (API)
@@ -206,6 +208,8 @@ class GaleriController extends Controller
         }
 
         $request->validate([
+            'judul' => 'nullable|string',
+            'deskripsi' => 'nullable|string',
             'foto' => 'nullable|image',
             'id_alumni' => 'nullable|exists:alumni,id'
         ]);
@@ -234,13 +238,13 @@ class GaleriController extends Controller
                 'id' => $galeri->id,
                 'judul' => $galeri->judul,
                 'deskripsi' => $galeri->deskripsi,
-                'foto' => $galeri->foto ? asset('storage/' . $galeri->foto) : null,
+                'foto' => $galeri->foto ? route('image.galeri', ['filename' => basename($galeri->foto)]) : null,
                 'id_alumni' => $galeri->id_alumni,
                 'nama_alumni' => $galeri->alumni ? $galeri->alumni->nama : null,
                 'created_at' => $galeri->created_at,
                 'updated_at' => $galeri->updated_at,
             ],
-        ]);
+        ], 200);
     }
 
     // DELETE galeri (API)
